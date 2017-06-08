@@ -1,25 +1,15 @@
-local transform;
-local gameObject;
+require "View/BasePanel"
 
-PromptPanel = {};
+PromptPanel = LXClass("PromptPanel",BasePanel);
 local this = PromptPanel;
 
---启动事件--
-function PromptPanel.Awake(obj)
-	gameObject = obj;
-	transform = obj.transform;
 
-	this.InitPanel();
-	logWarn("Awake lua--->>"..gameObject.name);
+function PromptPanel.Awake(obj)	
+	this.Super:InitChild(obj);
+	this:InitPanel();
 end
 
---初始化面板--
-function PromptPanel.InitPanel()
-	this.btnOpen = transform:Find("Open").gameObject;
-	this.gridParent = transform:Find('ScrollView/Grid');
-end
-
---单击事件--
-function PromptPanel.OnDestroy()
-	logWarn("OnDestroy---->>>");
+function PromptPanel:InitPanel()
+	self.btnOpen = self.Super.transform:Find("Open").gameObject;
+	self.gridParent = self.Super.transform:Find('ScrollView/Grid');
 end

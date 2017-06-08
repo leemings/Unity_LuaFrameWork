@@ -1,10 +1,12 @@
 
 CtrlNames = {
+	Main = "MainCtrl",
 	Prompt = "PromptCtrl",
 	Message = "MessageCtrl"
 }
 
 PanelNames = {
+	"MainPanel",	
 	"PromptPanel",	
 	"MessagePanel",
 }

@@ -85,6 +85,34 @@ namespace LuaFramework {
         /// 载入素材
         /// </summary>
         void LoadAsset<T>(string abName, string[] assetNames, Action<UObject[]> action = null, LuaFunction func = null) where T : UObject {
+
+
+
+#if UNITY_EDITOR
+            if (!abName.Equals(AppConst.AssetDir))
+            {
+                List<UObject> result = new List<UObject>();
+                foreach (string an in assetNames)
+                {
+                    UObject ub = Resources.Load(an);
+                    result.Add(ub);
+                }
+
+                if (action != null)
+                {
+                    action(result.ToArray());
+                }
+                if (func != null)
+                {
+                    func.Call((object)result.ToArray());
+                }
+                return;
+            }
+            
+#endif
+
+
+
             abName = GetRealAssetPath(abName);
 
             LoadAssetRequest request = new LoadAssetRequest();
@@ -268,7 +296,7 @@ namespace LuaFramework {
             uri = Util.DataPath + AppConst.AssetDir;
             if (!File.Exists(uri)) return;
             stream = File.ReadAllBytes(uri);
-            assetbundle = AssetBundle.CreateFromMemoryImmediate(stream);
+            assetbundle = AssetBundle.LoadFromMemory(stream);
             manifest = assetbundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
         }
 
@@ -308,7 +336,7 @@ namespace LuaFramework {
                 LoadDependencies(abname);
 
                 stream = File.ReadAllBytes(uri);
-                bundle = AssetBundle.CreateFromMemoryImmediate(stream); //关联数据的素材绑定
+                bundle = AssetBundle.LoadFromMemory(stream); //关联数据的素材绑定
                 bundles.Add(abname, bundle);
             } else {
                 bundles.TryGetValue(abname, out bundle);

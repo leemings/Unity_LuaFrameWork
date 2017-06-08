@@ -1,56 +1,57 @@
-require "Common/define"
-require "Common/functions"
-require "3rd/pblua/login_pb"
-require "3rd/pbc/protobuf"
-local sproto = require "3rd/sproto/sproto"
-local core = require "sproto.core"
-local print_r = require "3rd/sproto/print_r"
+require "Common/LXClass"
 
-BaseCtrl = class("BaseCtrl",nil);
-local this = BaseCtrl;
+BaseCtrl = LXClass("BaseCtrl",nil);
 
-local behaviour;
-local transform;
-local gameObject;
-local ctrlName;
-local panelName;
+local this = nil;
 
---构建函数--
-function BaseCtrl.New()
-    return this; 
+function BaseCtrl:BaseCtrl()
+	self.behaviour = nil;
+	self.transform = nil;
+	self.gameObject = nil;
+	self.ctrlName = nil;
+	self.realName = nil;
 end
 
 function BaseCtrl:Awake()
-    
+	this = self;
     self:SetPanelMame();
-    logWarn(self.ctrlName .. ".Awake--->>");
     
-    panelMgr:CreatePanel(self.panelName, self.OnCreate);
+    panelMgr:CreatePanel(self.realName, self.OnCreate);
 end
 
 --启动事件--
 function BaseCtrl.OnCreate(obj)
-    gameObject = obj;
-    transform = gameObject.transform;
+    this.gameObject = obj;
+    this.transform = obj.transform;
+    this.behaviour = this.gameObject:GetComponent('LuaBehaviour');
+	this:CreateFinish(obj);
+	
+	local CloseBtn = this.transform:Find("CloseBtn");
+	if CloseBtn ~= nil then
+		this.behaviour:AddClick(CloseBtn.gameObject, this.Close);
+	end
 
-    behaviour = gameObject:GetComponent('LuaBehaviour');
+end
 
-    local x = transform:Find("CloseBtn");
-
-    --behaviour:AddClick(transform:Find("CloseBtn").gameObject, this.Close);
-
-    logWarn("Start lua--->>"..gameObject.name);
+function BaseCtrl:CreateFinish(obj)
+	
 end
 
 --关闭事件--
-function BaseCtrl.Close()
-    panelMgr:ClosePanel(ctrlName);
+function BaseCtrl.Close(obj)
+	CtrlManager.ClosePanel(this.realName);
 end
 
 function BaseCtrl:SetPanelMame()
     local nameCtrl = string.split(self.ctrlName,"Ctrl");
     if table.getn(nameCtrl) >= 1 then
-        self.panelName = nameCtrl[1];
+        self.realName = nameCtrl[1];
     end
 end 
 
+function BaseCtrl:SetShow(isShow) 
+	if self.gameObject == nil then
+		return;
+	end
+	self.gameObject:SetActive(isShow);
+end

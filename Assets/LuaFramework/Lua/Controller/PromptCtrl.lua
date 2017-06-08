@@ -9,14 +9,14 @@ local sproto = require "3rd/sproto/sproto"
 local core = require "sproto.core"
 local print_r = require "3rd/sproto/print_r"
 
-PromptCtrl = class("PromptCtrl",BaseCtrl);
-local this = PromptCtrl;
 
+PromptCtrl = LXClass("PromptCtrl",BaseCtrl);
 
-function PromptCtrl.OnCreate(obj)
-   PromptCtrl.super.OnCreate(obj);
-   PromptCtrl.super.behaviour:AddClick(PromptPanel.btnOpen, this.OnClick);
-   resMgr:LoadPrefab('prompt', { 'PromptItem' }, this.InitPanel);
+local this;
+function PromptCtrl:CreateFinish(obj)
+	this = self;
+	self.behaviour:AddClick(PromptPanel.btnOpen, self.OnClick);
+	resMgr:LoadPrefab('prompt', { 'PromptItem' }, self.InitPanel);
 end
 
 --初始化面板--
@@ -29,7 +29,7 @@ function PromptCtrl.InitPanel(objs)
 		go.transform:SetParent(parent);
 		go.transform.localScale = Vector3.one;
 		go.transform.localPosition = Vector3.zero;
-        behaviour:AddClick(go, this.OnItemClick);
+        this.behaviour:AddClick(go, this.OnItemClick);
 
 	    local label = go.transform:Find('Text');
 	    label:GetComponent('Text').text = tostring(i);

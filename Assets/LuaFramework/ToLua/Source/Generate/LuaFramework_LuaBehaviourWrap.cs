@@ -7,12 +7,29 @@ public class LuaFramework_LuaBehaviourWrap
 	public static void Register(LuaState L)
 	{
 		L.BeginClass(typeof(LuaFramework.LuaBehaviour), typeof(View));
+		L.RegFunction("TimerUpdate", TimerUpdate);
 		L.RegFunction("AddClick", AddClick);
 		L.RegFunction("RemoveClick", RemoveClick);
 		L.RegFunction("ClearClick", ClearClick);
 		L.RegFunction("__eq", op_Equality);
 		L.RegFunction("__tostring", ToLua.op_ToString);
 		L.EndClass();
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int TimerUpdate(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 1);
+			LuaFramework.LuaBehaviour obj = (LuaFramework.LuaBehaviour)ToLua.CheckObject(L, 1, typeof(LuaFramework.LuaBehaviour));
+			obj.TimerUpdate();
+			return 0;
+		}
+		catch(Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

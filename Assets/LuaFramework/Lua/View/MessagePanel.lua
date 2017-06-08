@@ -1,25 +1,16 @@
-local transform;
-local gameObject;
+require "View/BasePanel"
 
-MessagePanel = {};
+MessagePanel = LXClass("MessagePanel",BasePanel);
 local this = MessagePanel;
 
 --启动事件--
 function MessagePanel.Awake(obj)
-	gameObject = obj;
-	transform = obj.transform;
-
-	this.InitPanel();
-	logWarn("Awake lua--->>"..gameObject.name);
+	this.Super:InitChild(obj);
+	this:InitPanel();
 end
 
 --初始化面板--
-function MessagePanel.InitPanel()
-	this.btnClose = transform:Find("Button").gameObject;
+function MessagePanel:InitPanel()
 end
 
---单击事件--
-function MessagePanel.OnDestroy()
-	logWarn("OnDestroy---->>>");
-end
 
