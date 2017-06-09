@@ -11,6 +11,10 @@ PanelNames = {
 	"MessagePanel",
 }
 
+EventType = {
+	PanelClose = "PanelClose"
+}
+
 --协议类型--
 ProtocalType = {
 	BINARY = 0,

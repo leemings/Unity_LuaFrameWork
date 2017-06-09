@@ -39,7 +39,10 @@ end
 
 --关闭事件--
 function BaseCtrl.Close(obj)
-	CtrlManager.ClosePanel(this.realName);
+	panelMgr:ClosePanel(this.realName);
+	Event.Brocast(EventType.PanelClose,this.ctrlName);
+	
+	--CtrlManager.ClosePanel(this.realName);
 end
 
 function BaseCtrl:SetPanelMame()

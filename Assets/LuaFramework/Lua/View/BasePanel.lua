@@ -1,4 +1,4 @@
-
+require "LXClass"
 BasePanel = LXClass("BasePanel",nil);
 
 local this = BasePanel;

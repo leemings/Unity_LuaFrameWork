@@ -7,6 +7,8 @@ function MainCtrl:CreateFinish(obj)
 	this = self;
 	self.behaviour:AddClick(MainPanel.PromptBtn, self.OnPromptClick);
 	self.behaviour:AddClick(MainPanel.MessageBtn, self.OnMessageClick);
+	
+	Event.AddListener(EventType.PanelClose,self.OnPanelClose);
 end
 
 function MainCtrl.OnPromptClick()
@@ -23,4 +25,10 @@ function MainCtrl.OnMessageClick()
     if ctrl ~= nil then
         ctrl:Awake();
     end
+end
+
+function MainCtrl.OnPanelClose(ctrlName)
+	if ctrlName ~= this.Super.ctrlName then
+		this:SetShow(true);
+	end
 end
